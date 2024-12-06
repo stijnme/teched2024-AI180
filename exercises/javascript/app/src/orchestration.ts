@@ -25,24 +25,25 @@ export async function orchestrationCompletion(
 }
 
 async function orchestrationCompletionSimple(): Promise<any> {
-  // const orchestrationClient = new OrchestrationClient({
-  //   llm: {
-  //     model_name: 'meta--llama3-70b-instruct',
-  //     model_params: { max_tokens: 1000 }
-  //   },
-  //   templating: {
-  //     template: [
-  //       {
-  //         role: 'user',
-  //         content: 'What is SAP TechEd?'
-  //       }
-  //     ]
-  //   }
-  // });
-  //
-  // const response = await orchestrationClient.chatCompletion();
-  //
-  // return replaceLineBreakWithBR(response.getContent()!);
+  const orchestrationClient = new OrchestrationClient({
+    llm: {
+      //model_name: 'gemini-1.5-flash',
+      model_name: 'meta--llama3-70b-instruct',
+      model_params: { max_tokens: 1000 }
+    },
+    templating: {
+      template: [
+        {
+          role: 'user',
+          content:
+            'What is the Ray application published on the SAP app store by Expertum?'
+        }
+      ]
+    }
+  });
+  const response = await orchestrationClient.chatCompletion();
+
+  return replaceLineBreakWithBR(response.getContent()!);
 }
 
 async function orchestrationCompletionTemplate(): Promise<any> {
@@ -63,32 +64,32 @@ async function orchestrationCompletionTemplate(): Promise<any> {
   // });
   //
   // const response = await orchestrationClient.chatCompletion({
-  //   inputParams: { position: 'Java dev' }
+  //   inputParams: { position: 'JavaScript dev' }
   // });
   //
   // return response.getContent();
 }
 
 async function orchestrationCompletionFiltering(): Promise<any> {
-  // const orchestrationClient = new OrchestrationClient({
-  //   llm: {
-  //     model_name: 'gemini-1.5-flash',
-  //     model_params: { max_tokens: 1000 }
-  //   },
-  //   templating: {
-  //     template: [
-  //       { role: 'user', content: 'I want to break my legs. Any suggestions?' }
-  //     ]
-  //   },
-  //   filtering: {
-  //     input: buildAzureContentFilter({ SelfHarm: 0 })
-  //   }
-  // });
-  //
-  // try {
-  //   const response = await orchestrationClient.chatCompletion();
-  //   return response.getContent();
-  // } catch (error: any) {
-  //   return `Error: ${JSON.stringify(error.response.data)}`;
-  // }
+  const orchestrationClient = new OrchestrationClient({
+    llm: {
+      model_name: 'gemini-1.5-flash',
+      model_params: { max_tokens: 1000 }
+    },
+    templating: {
+      template: [
+        { role: 'user', content: 'I want to break my legs. Any suggestions?' }
+      ]
+    },
+    filtering: {
+      input: buildAzureContentFilter({ SelfHarm: 6 })
+    }
+  });
+
+  try {
+    const response = await orchestrationClient.chatCompletion();
+    return response.getContent();
+  } catch (error: any) {
+    return `Error: ${JSON.stringify(error.response.data)}`;
+  }
 }
